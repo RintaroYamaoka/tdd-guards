@@ -1,0 +1,14 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          { "type": "command", "command": "bash \"${CLAUDE_PLUGIN_ROOT}\"/hooks/block-dangerous-git.sh" },
+          { "type": "command", "command": "bash \"${CLAUDE_PLUGIN_ROOT}\"/hooks/block-stale-push.sh" },
+          { "type": "command", "command": "bash \"${CLAUDE_PLUGIN_ROOT}\"/hooks/test-and-lint-before-commit.sh", "timeout": 600 }
+        ]
+      }
+    ]
+  }
+}
