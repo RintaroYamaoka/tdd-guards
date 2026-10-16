@@ -1,12 +1,17 @@
 #!/usr/bin/env bash
-# push --force / reset --hard / protected(main|master|production) への直 push を止める。exit 2 = block。
+# 強制 push / reset --hard / protected(main|master|production) への直 push を止める。exit 2 = block。
+# 見るのは git-cmds.py が抜き出した git のコマンド片だけ(heredoc・引用の中の文字列では止めない)。
 set -u
-cmd=$(python3 -c 'import sys,json;print(json.load(sys.stdin).get("tool_input",{}).get("command",""))' 2>/dev/null) || exit 0
-case "$cmd" in
-  *"push --force"*|*"push -f "*|*"push -f"|*"--force-with-lease"*) echo "tdd: git push --force は人が明示した時だけ。" >&2; exit 2;;
-  *"reset --hard"*) echo "tdd: git reset --hard は人が明示した時だけ(並走の作業・未 commit の変更が消える)。" >&2; exit 2;;
-esac
-if echo "$cmd" | grep -Eq 'git push( [^ ]+)* (origin|upstream) (main|master|production)( |$)'; then
-  echo "tdd: protected branch への直 push。PR を通す。" >&2; exit 2
-fi
+H="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cmds=$(python3 "$H/git-cmds.py") || exit 0
+[ -n "$cmds" ] || exit 0
+while IFS= read -r c; do
+  [ -n "$c" ] || continue
+  if echo "$c" | grep -Eq '^git\s+push\b' && echo "$c" | grep -Eq -- '(^|\s)(--force|-f|--force-with-lease)(\s|$)'; then
+    echo "tdd: 強制 push は人が明示した時だけ。[$c]" >&2; exit 2; fi
+  if echo "$c" | grep -Eq '^git\s+reset\s+.*--hard'; then
+    echo "tdd: git reset --hard は人が明示した時だけ(未 commit の変更が消える)。[$c]" >&2; exit 2; fi
+  if echo "$c" | grep -Eq '^git\s+push\s+(\S+\s+)*(origin|upstream)\s+(main|master|production)(\s|$)'; then
+    echo "tdd: protected branch への直 push。PR を通す。[$c]" >&2; exit 2; fi
+done <<< "$cmds"
 exit 0

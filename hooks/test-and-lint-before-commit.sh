@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 # git commit の前に、package.json に test / lint があれば流す。落ちたら止める。exit 2 = block。
 set -u
-cmd=$(python3 -c 'import sys,json;print(json.load(sys.stdin).get("tool_input",{}).get("command",""))' 2>/dev/null) || exit 0
-echo "$cmd" | grep -Eq '(^|[;&| ])git commit' || exit 0
+H="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cmds=$(python3 "$H/git-cmds.py") || exit 0
+echo "$cmds" | grep -Eq '^git\s+commit\b' || exit 0
 [ -f package.json ] || exit 0
 has() { python3 -c 'import json,sys;print("1" if sys.argv[1] in json.load(open("package.json")).get("scripts",{}) else "")' "$1"; }
 if [ -n "$(has test)" ]; then
