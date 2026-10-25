@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.2.0] - 2026-10-26
+
+### Changed
+- `test-and-lint-before-commit`:PR ごとの CI(`.github/workflows` に `pull_request` で走る workflow)がある repo では、全件のテストと lint を CI に任せて通す。commit ごとの全件は CI と同じものの 2 回目で、大きい repo(vitest 30,000 本・10 分超)ではセッションごと落ちていた。skill `tdd` §3 も同じ形に(手元は変更したファイルのテストだけ)。
+
 ## [0.1.0] - 2026-10-16
 
 ### Added

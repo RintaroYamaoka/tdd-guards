@@ -6,7 +6,7 @@
 
 | hook | 止める物 | 一か月の実績 |
 |---|---|---|
-| `test-and-lint-before-commit.sh` | `git commit` の前に `npm test` / `npm run lint`(package.json にあれば)。落ちたら止める | テスト 68・lint 71 |
+| `test-and-lint-before-commit.sh` | `git commit` の前に `npm test` / `npm run lint`(package.json にあれば)。落ちたら止める。PR ごとの CI がある repo(`.github/workflows` に `pull_request` の workflow)は CI に任せて通す | テスト 68・lint 71 |
 | `block-stale-push.sh` | `git push` の前に fetch し、upstream が進んでいたら止める | 56 |
 | `block-dangerous-git.sh` | `push --force` / `reset --hard` / main・master・production への直 push | 23+13+3 |
 
