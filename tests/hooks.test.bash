@@ -36,5 +36,18 @@ printf '{"scripts":{"test":"exit 1"}}' > package.json
 t 2 "git commit -m x" test-and-lint-before-commit.sh
 printf '{"scripts":{"test":"exit 0"}}' > package.json
 t 0 "git commit -m x" test-and-lint-before-commit.sh
+# PR の CI がある repo は落ちるテストでも通す(全件は CI)。push だけの workflow では通さない
+git init -q .
+printf '{"scripts":{"test":"exit 1"}}' > package.json
+mkdir -p .github/workflows
+printf 'on:\n  push:\n    branches: [main]\n' > .github/workflows/deploy.yml
+t 2 "git commit -m x" test-and-lint-before-commit.sh
+printf 'name: ci\non:\n  pull_request:\n  push:\n' > .github/workflows/ci.yml
+t 0 "git commit -m x" test-and-lint-before-commit.sh
+rm .github/workflows/ci.yml; printf 'on: [push, pull_request]\n' > .github/workflows/ci.yaml
+t 0 "git commit -m x" test-and-lint-before-commit.sh
+# merge 後だけ走る workflow(types: [closed])は CI に数えない
+rm .github/workflows/ci.yaml; printf 'on:\n  pull_request:\n    types: [closed]\n' > .github/workflows/deploy-on-merge.yml
+t 2 "git commit -m x" test-and-lint-before-commit.sh
 popd >/dev/null; rm -rf "$tmp"
 [ $fail = 0 ] && echo "all ok" || { echo "some failed"; exit 1; }

@@ -27,6 +27,7 @@ project-bootstrap の 22 gate のうち、2026-09-15〜10-16 の transcript で*
 
 ## 3. commit の前
 - テストと lint を**自分で流して**から commit する。落ちているなら直す。スキップ・`--no-verify`・テストの削除で通さない。
+- PR ごとの CI がある repo は、手元で流すのは変更したファイルのテストと lint だけ。全件は CI に任せ、push 後に CI の緑を見る(全件を手元で回し直さない)。
 - `git add -A` / `git commit -a` / 引数なしの `git stash` は使わない。自分が触ったファイルだけを stage する。
 - 1 PR = 1 責務。依頼に無い「ついでの改善」は別 PR。
 

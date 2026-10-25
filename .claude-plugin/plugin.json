@@ -1,6 +1,6 @@
 {
   "name": "tdd-guards",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "project-bootstrap(退役・ADR 0027)の後継。22 本の gate のうち transcript で実際に効いていた物だけを、skill 1 本(tdd)と PreToolUse hook 3 本(push --force / reset --hard / protected への直 push の拒否・古い checkout からの push の拒否・commit 前の test+lint)に縮めた。並走・lane・作業指示書の運用は持たない。",
   "author": { "name": "Rintaro Yamaoka" },
   "homepage": "https://github.com/RintaroYamaoka/tdd-guards",
