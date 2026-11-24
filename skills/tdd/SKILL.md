@@ -42,3 +42,4 @@ project-bootstrap の 22 gate のうち、2026-09-15〜10-16 の transcript で*
 
 ## hook(このプラグインが入っていれば自動で効く)
 `hooks/hooks.json` の PreToolUse(Bash)3 本が 3・4 を決定的に止める:`block-dangerous-git.sh` / `block-stale-push.sh` / `test-and-lint-before-commit.sh`。skill は読む側、hook は止める側。両方で一組。
+もう 1 本、UserPromptSubmit の `say-terms.sh` が言葉のルール(`hooks/terms.md`:コードの名前と標準用語で書く)を毎ターン context に入れる。文はそこにだけ置く。
