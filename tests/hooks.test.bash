@@ -50,4 +50,8 @@ t 0 "git commit -m x" test-and-lint-before-commit.sh
 rm .github/workflows/ci.yaml; printf 'on:\n  pull_request:\n    types: [closed]\n' > .github/workflows/deploy-on-merge.yml
 t 2 "git commit -m x" test-and-lint-before-commit.sh
 popd >/dev/null; rm -rf "$tmp"
+# say-terms:どんな入力でも止めず(exit 0)、言葉のルールを stdout に出す
+out=$(printf '{"prompt":"x"}' | bash "$H/say-terms.sh"); rc=$?
+if [ $rc = 0 ] && echo "$out" | grep -q 'コードの名前で呼ぶ' && [ "$(echo "$out" | wc -l)" -le 6 ]; then echo "ok   say-terms.sh -> 0・ルールを出す"; else echo "FAIL say-terms.sh (rc=$rc)"; fail=1; fi
+out=$(bash "$H/say-terms.sh" </dev/null); [ $? = 0 ] && [ -n "$out" ] && echo "ok   say-terms.sh (stdin 無し) -> 0" || { echo "FAIL say-terms.sh (stdin 無し)"; fail=1; }
 [ $fail = 0 ] && echo "all ok" || { echo "some failed"; exit 1; }

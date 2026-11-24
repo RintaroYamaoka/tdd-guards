@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.3.0] - 2026-11-24
+
+### Added
+- `say-terms.sh`(UserPromptSubmit)と `hooks/terms.md`:言葉のルールを毎ターン context に入れる。コードにある物はコードの名前で呼ぶ / 初出に一言添える / 名前が無い物は業界の標準用語(比喩や縮めた言葉に置き換えない)/ 同じ物を 2 つの名前で呼ばない。
+- ADR 0002(なぜ skill でなく毎ターンの hook か)。`tests/hooks.test.bash` に smoke 2 本。
+
 ## [0.2.0] - 2026-10-26
 
 ### Changed
